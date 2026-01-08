@@ -13,8 +13,9 @@
       <form action="" id="product-form">
         <input type="text" id="name" placeholder="Product name" autofocus />
         <input type="number" id="price" placeholder="Price" min="1" />
+        <input type="number" id="quantity" placeholder="Quantity" min="1" />
         <select name="category" id="category">
-          <option value="">Select category</option>
+          <option value="">Category</option>
           <option value="clothing">Clothing</option>
           <option value="home">Home</option>
           <option value="other">Other</option>
@@ -26,6 +27,20 @@
     <section>
       <h2>Products</h2>
       <ul id="product-list"></ul>
+    </section>
+
+    <section>
+      <h2>Create order</h2>
+      <form id="order-form">
+        <select id="order-product"></select>
+        <input type="number" id="order-quantity" min="1" />
+        <button type="submit">Order</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Orders</h2>
+      <ul id="order-list"></ul>
     </section>
   </body>
   <script src="main.js"></script>
