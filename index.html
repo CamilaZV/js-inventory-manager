@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Inventory Manager</title>
+  </head>
+  <body>
+    <h1>Inventory manager</h1>
+    <section>
+      <h2>Add product</h2>
+      <form action="" id="product-form">
+        <input type="text" id="name" placeholder="Product name" autofocus />
+        <input type="number" id="price" placeholder="Price" min="1" />
+        <select name="category" id="category">
+          <option value="">Select category</option>
+          <option value="clothing">Clothing</option>
+          <option value="home">Home</option>
+          <option value="other">Other</option>
+        </select>
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Products</h2>
+      <ul id="product-list"></ul>
+    </section>
+  </body>
+  <script src="main.js"></script>
+</html>
