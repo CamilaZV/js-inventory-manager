@@ -11,9 +11,21 @@
     <section>
       <h2>Add product</h2>
       <form action="" id="product-form">
-        <input type="text" id="name" placeholder="Product name" autofocus />
-        <input type="number" id="price" placeholder="Price" min="1" />
-        <input type="number" id="quantity" placeholder="Quantity" min="1" />
+        <input
+          type="text"
+          id="name"
+          placeholder="Product name"
+          autofocus
+          required
+        />
+        <input type="number" id="price" placeholder="Price" min="1" required />
+        <input
+          type="number"
+          id="quantity"
+          placeholder="Quantity"
+          min="1"
+          required
+        />
         <select name="category" id="category">
           <option value="">Category</option>
           <option value="clothing">Clothing</option>
@@ -33,7 +45,7 @@
       <h2>Create order</h2>
       <form id="order-form">
         <select id="order-product"></select>
-        <input type="number" id="order-quantity" min="1" />
+        <input type="number" id="order-quantity" min="1" required />
         <button type="submit">Order</button>
       </form>
     </section>

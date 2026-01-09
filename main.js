@@ -5,12 +5,16 @@ const form = document.getElementById('product-form');
 const productList = document.getElementById('product-list');
 const orderForm = document.getElementById('order-form');
 const orderList = document.getElementById('order-list');
+const productSelect = document.getElementById('order-product');
+const orderQuantityInput = document.getElementById('order-quantity');
 
 loadProducts();
 loadOrders();
 renderProducts();
-renderOrders();
 renderProductSelect();
+renderOrders();
+
+productSelect.dispatchEvent(new Event('change'));
 
 //Products
 form.addEventListener('submit', (e) => {
@@ -88,16 +92,16 @@ orderForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const productId = Number(document.getElementById('order-product').value);
-
   const orderQuantity = Number(document.getElementById('order-quantity').value);
 
-  const product = products.find((p) => p.id === Number(productId));
-  if (!product) {
+  const orderProduct = products.find((p) => p.id === Number(productId));
+
+  if (!orderProduct) {
     alert('Product not found');
     return;
   }
 
-  if (orderQuantity <= 0 || orderQuantity > product.quantity) {
+  if (orderQuantity <= 0 || orderQuantity > orderProduct.quantity) {
     alert('Invalid quantity');
     return;
   }
@@ -105,14 +109,14 @@ orderForm.addEventListener('submit', (e) => {
   const order = {
     id: Date.now(),
     productId,
-    productName: product.name,
+    productName: orderProduct.name,
     quantity: orderQuantity,
-    total: product.price * orderQuantity,
+    total: orderProduct.price * orderQuantity,
   };
 
   orders.push(order);
 
-  product.quantity -= orderQuantity;
+  orderProduct.quantity -= orderQuantity;
   saveProducts();
   saveOrders();
   renderProducts();
@@ -124,13 +128,23 @@ orderForm.addEventListener('submit', (e) => {
 function renderProductSelect() {
   const select = document.getElementById('order-product');
   select.innerHTML = '';
-  products.forEach((product) => {
-    if (product.quantity > 0) {
-      const option = document.createElement('option');
-      option.textContent = `${product.name} (Stock: ${product.quantity})`;
-      option.value = product.id;
-      select.appendChild(option);
-    }
+
+  const availableProducts = products.filter((p) => p.quantity > 0);
+
+  if (availableProducts.length === 0) {
+    const option = document.createElement('option');
+    option.textContent = 'No products available';
+    option.disabled = true;
+    option.selected = true;
+    select.appendChild(option);
+    return;
+  }
+
+  availableProducts.forEach((product) => {
+    const option = document.createElement('option');
+    option.value = product.id;
+    option.textContent = `${product.name} (Stock: ${product.quantity})`;
+    select.appendChild(option);
   });
 }
 
@@ -164,3 +178,12 @@ function renderOrders() {
     orderList.appendChild(li);
   });
 }
+
+productSelect.addEventListener('change', () => {
+  const selectedId = Number(productSelect.value);
+  const selectedProduct = products.find((p) => p.id === selectedId);
+  if (selectedProduct) {
+    orderQuantityInput.max = selectedProduct.quantity;
+    orderQuantityInput.value = 1;
+  }
+});
