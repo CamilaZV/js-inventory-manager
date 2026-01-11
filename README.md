@@ -1,15 +1,27 @@
 # JS Inventory Manager
 
-JavaScript application to manage products and orders.
+JavaScript application to manage products and orders built with vanilla JavaScript.
+
+This project simulates a basic inventory workflow:
+products can be added with available stock, orders can be created, and stock is automatically updated.
+
+## 🎯 Goals
+
+- Practice JavaScript logic and state management
+- Work with dynamic DOM updates
+- Handle data persistence with localStorage
+- Implement basic business rules
 
 ## 🛠️ Technologies
 
-- JavaScript
-- HTML
-- CSS
+- HTML5
+- CSS3
+- JavaScript (Vanilla)
 
 ## 📱 Features
 
-- Create and delete products
-- Create orders from existing products
-- Persist data using localStorage
+- Add products with category, price and stock
+- Create orders based on available inventory
+- Automatic stock update after each order
+- Prevent invalid orders
+- Persistent data using localStorage

@@ -1,7 +1,7 @@
 let products = [];
 let orders = [];
 
-const form = document.getElementById('product-form');
+const productForm = document.getElementById('product-form');
 const productList = document.getElementById('product-list');
 const orderForm = document.getElementById('order-form');
 const orderList = document.getElementById('order-list');
@@ -16,35 +16,6 @@ renderOrders();
 
 productSelect.dispatchEvent(new Event('change'));
 
-//Products
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const name = document.getElementById('name').value.trim();
-  const price = Number(document.getElementById('price').value);
-  const category = document.getElementById('category').value.trim();
-  const quantity = Number(document.getElementById('quantity').value);
-
-  //Temporary validation
-  if (!name || price < 0 || !category || quantity <= 0) {
-    alert('Please fill all fields correctly');
-    return;
-  }
-
-  const product = {
-    id: Date.now(),
-    name,
-    price,
-    category,
-    quantity,
-  };
-
-  products.push(product);
-  saveProducts();
-  renderProducts();
-  renderProductSelect();
-  form.reset();
-});
-
 function saveProducts() {
   localStorage.setItem('products', JSON.stringify(products));
 }
@@ -54,6 +25,59 @@ function loadProducts() {
   if (storedProducts) {
     products = JSON.parse(storedProducts);
   }
+}
+
+function saveOrders() {
+  localStorage.setItem('orders', JSON.stringify(orders));
+}
+
+function loadOrders() {
+  const storedOrders = localStorage.getItem('orders');
+  if (storedOrders) {
+    orders = JSON.parse(storedOrders);
+  }
+}
+
+function renderProductSelect() {
+  const select = document.getElementById('order-product');
+  select.innerHTML = '';
+
+  const availableProducts = products.filter((p) => p.quantity > 0);
+
+  if (availableProducts.length === 0) {
+    const option = document.createElement('option');
+    option.textContent = 'No products available';
+    option.disabled = true;
+    option.selected = true;
+    select.appendChild(option);
+    return;
+  }
+
+  availableProducts.forEach((product) => {
+    const option = document.createElement('option');
+    option.value = product.id;
+    option.textContent = `${product.name} (Stock: ${product.quantity})`;
+    select.appendChild(option);
+  });
+}
+
+function renderOrders() {
+  orderList.innerHTML = '';
+
+  if (orders.length === 0) {
+    orderList.innerHTML = '<li>No orders yet</li>';
+    return;
+  }
+
+  orders.forEach((order) => {
+    const li = document.createElement('li');
+    if (!order.productName) {
+      li.textContent = 'Unknown product';
+    }
+    li.textContent = `${order.productName} x ${order.quantity} - $${order.total}`;
+
+    orderList.appendChild(li);
+  });
 }
 
 function renderProducts() {
@@ -87,7 +111,34 @@ function deleteProduct(id) {
   renderProductSelect();
 }
 
-//***Orders***
+productForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const price = Number(document.getElementById('price').value);
+  const category = document.getElementById('category').value.trim();
+  const quantity = Number(document.getElementById('quantity').value);
+
+  //Temporary validation
+  if (!name || price < 0 || !category || quantity <= 0) {
+    alert('Please fill all fields correctly');
+    return;
+  }
+
+  const product = {
+    id: Date.now(),
+    name,
+    price,
+    category,
+    quantity,
+  };
+
+  products.push(product);
+  saveProducts();
+  renderProducts();
+  renderProductSelect();
+  form.reset();
+});
+
 orderForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -124,60 +175,6 @@ orderForm.addEventListener('submit', (e) => {
   renderProductSelect();
   orderForm.reset();
 });
-
-function renderProductSelect() {
-  const select = document.getElementById('order-product');
-  select.innerHTML = '';
-
-  const availableProducts = products.filter((p) => p.quantity > 0);
-
-  if (availableProducts.length === 0) {
-    const option = document.createElement('option');
-    option.textContent = 'No products available';
-    option.disabled = true;
-    option.selected = true;
-    select.appendChild(option);
-    return;
-  }
-
-  availableProducts.forEach((product) => {
-    const option = document.createElement('option');
-    option.value = product.id;
-    option.textContent = `${product.name} (Stock: ${product.quantity})`;
-    select.appendChild(option);
-  });
-}
-
-function saveOrders() {
-  localStorage.setItem('orders', JSON.stringify(orders));
-}
-
-function loadOrders() {
-  const storedOrders = localStorage.getItem('orders');
-  if (storedOrders) {
-    orders = JSON.parse(storedOrders);
-  }
-}
-
-function renderOrders() {
-  console.log('entra al render orders');
-  orderList.innerHTML = '';
-
-  if (orders.length === 0) {
-    orderList.innerHTML = '<li>No orders yet</li>';
-    return;
-  }
-
-  orders.forEach((order) => {
-    const li = document.createElement('li');
-    if (!order.productName) {
-      li.textContent = 'Unknown product';
-    }
-    li.textContent = `${order.productName} x ${order.quantity} - $${order.total}`;
-
-    orderList.appendChild(li);
-  });
-}
 
 productSelect.addEventListener('change', () => {
   const selectedId = Number(productSelect.value);
