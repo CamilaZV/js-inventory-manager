@@ -14,17 +14,13 @@ renderProducts();
 renderProductSelect();
 renderOrders();
 
-productSelect.dispatchEvent(new Event('change'));
-
 function saveProducts() {
   localStorage.setItem('products', JSON.stringify(products));
 }
 
 function loadProducts() {
   const storedProducts = localStorage.getItem('products');
-  if (storedProducts) {
-    products = JSON.parse(storedProducts);
-  }
+  if (storedProducts) products = JSON.parse(storedProducts);
 }
 
 function saveOrders() {
@@ -33,22 +29,26 @@ function saveOrders() {
 
 function loadOrders() {
   const storedOrders = localStorage.getItem('orders');
-  if (storedOrders) {
-    orders = JSON.parse(storedOrders);
-  }
+  if (storedOrders) orders = JSON.parse(storedOrders);
 }
 
 function renderProductSelect() {
   const select = document.getElementById('order-product');
   select.innerHTML = '';
 
+  const optionDefault = document.createElement('option');
+  optionDefault.textContent = 'Product';
+  select.appendChild(optionDefault);
+
   const availableProducts = products.filter((p) => p.quantity > 0);
 
   if (availableProducts.length === 0) {
     const option = document.createElement('option');
     option.textContent = 'No products available';
+    optionDefault.hidden = true;
     option.disabled = true;
     option.selected = true;
+    orderQuantityInput.disabled = true;
     select.appendChild(option);
     return;
   }
@@ -78,13 +78,16 @@ function renderOrders() {
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
+    deleteBtn.classList.add('btn-delete');
+    li.appendChild(deleteBtn);
+    orderList.appendChild(li);
+
     deleteBtn.addEventListener('click', () => {
       orders = orders.filter((o) => o.id !== order.id);
       saveOrders();
       renderOrders();
+      productForm.reset();
     });
-    li.appendChild(deleteBtn);
-    orderList.appendChild(li);
   });
 }
 
@@ -99,16 +102,17 @@ function renderProducts() {
   products.forEach((product) => {
     const li = document.createElement('li');
 
-    li.textContent = `${product.name} - $${product.price} (${product.category}) stock: ${product.quantity}`;
+    li.textContent = `${product.name} (${product.category}) - $${product.price} - Stock: ${product.quantity}`;
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
+    deleteBtn.classList.add('btn-delete');
+    li.appendChild(deleteBtn);
+    productList.appendChild(li);
+
     deleteBtn.addEventListener('click', () => {
       deleteProduct(product.id);
     });
-
-    li.appendChild(deleteBtn);
-    productList.appendChild(li);
   });
 }
 
@@ -117,6 +121,7 @@ function deleteProduct(id) {
   saveProducts();
   renderProducts();
   renderProductSelect();
+  productForm.name.focus();
 }
 
 productForm.addEventListener('submit', (e) => {
@@ -140,22 +145,27 @@ productForm.addEventListener('submit', (e) => {
     quantity,
   };
 
+  if (orderQuantityInput.disabled == true) orderQuantityInput.disabled = false;
+
   products.push(product);
+  productForm.reset();
+  productForm.name.focus();
   saveProducts();
   renderProducts();
   renderProductSelect();
-  form.reset();
 });
 
 orderForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const productId = Number(document.getElementById('order-product').value);
-  const orderQuantity = Number(document.getElementById('order-quantity').value);
+  const productId = Number(productSelect.value);
+  const orderQuantity = Number(orderQuantityInput.value);
 
   const orderProduct = products.find((p) => p.id === Number(productId));
 
-  if (!orderProduct) {
+  if (orderProduct) {
+    orderQuantity.max = orderProduct.quantity;
+  } else {
     alert('Product not found');
     return;
   }
@@ -176,19 +186,11 @@ orderForm.addEventListener('submit', (e) => {
   orders.push(order);
 
   orderProduct.quantity -= orderQuantity;
+  orderForm.reset();
   saveProducts();
   saveOrders();
   renderProducts();
   renderOrders();
   renderProductSelect();
-  orderForm.reset();
-});
-
-productSelect.addEventListener('change', () => {
-  const selectedId = Number(productSelect.value);
-  const selectedProduct = products.find((p) => p.id === selectedId);
-  if (selectedProduct) {
-    orderQuantityInput.max = selectedProduct.quantity;
-    orderQuantityInput.value = 1;
-  }
+  productForm.name.focus();
 });

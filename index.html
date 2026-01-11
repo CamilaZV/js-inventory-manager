@@ -7,59 +7,66 @@
     <title>Inventory Manager</title>
   </head>
   <body>
-    <h1>Inventory manager</h1>
-    <section>
-      <h2>Add product</h2>
-      <form action="" id="product-form">
-        <input
-          type="text"
-          id="name"
-          placeholder="Product name"
-          autofocus
-          required
-        />
-        <input type="number" id="price" placeholder="Price" min="1" required />
-        <input
-          type="number"
-          id="quantity"
-          placeholder="Quantity"
-          min="1"
-          required
-        />
-        <select name="category" id="category">
-          <option value="">Category</option>
-          <option value="clothing">Clothing</option>
-          <option value="home">Home</option>
-          <option value="other">Other</option>
-        </select>
-        <button type="submit">Add</button>
-      </form>
-    </section>
+    <h1>INVENTORY MANAGER</h1>
+    <div class="container">
+      <section>
+        <h2>Add product</h2>
+        <form id="product-form">
+          <input
+            type="text"
+            id="name"
+            placeholder="Product name"
+            autofocus
+            required
+          />
+          <input
+            type="number"
+            id="price"
+            placeholder="Price"
+            min="1"
+            required
+          />
+          <input
+            type="number"
+            id="quantity"
+            placeholder="Quantity"
+            min="1"
+            required
+          />
+          <select name="category" id="category">
+            <option value="">Category</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Home">Home</option>
+            <option value="Other">Other</option>
+          </select>
+          <button type="submit" class="btn-add">Add</button>
+        </form>
+      </section>
 
-    <section>
-      <h2>Products</h2>
-      <ul id="product-list"></ul>
-    </section>
+      <section>
+        <h2>Products</h2>
+        <ul id="product-list"></ul>
+      </section>
 
-    <section>
-      <h2>Create order</h2>
-      <form id="order-form">
-        <select id="order-product"></select>
-        <input
-          type="number"
-          id="order-quantity"
-          min="1"
-          placeholder="Quantity order"
-          required
-        />
-        <button type="submit">Order</button>
-      </form>
-    </section>
+      <section>
+        <h2>Create order</h2>
+        <form id="order-form">
+          <select id="order-product"></select>
+          <input
+            type="number"
+            id="order-quantity"
+            placeholder="Order quantity"
+            required
+          />
+          <button type="submit" class="btn-add">Save order</button>
+        </form>
+      </section>
 
-    <section>
-      <h2>Orders</h2>
-      <ul id="order-list"></ul>
-    </section>
+      <section>
+        <h2>Orders</h2>
+        <ul id="order-list"></ul>
+      </section>
+    </div>
   </body>
   <script src="main.js"></script>
 </html>
