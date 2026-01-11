@@ -76,6 +76,14 @@ function renderOrders() {
     }
     li.textContent = `${order.productName} x ${order.quantity} - $${order.total}`;
 
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.addEventListener('click', () => {
+      orders = orders.filter((o) => o.id !== order.id);
+      saveOrders();
+      renderOrders();
+    });
+    li.appendChild(deleteBtn);
     orderList.appendChild(li);
   });
 }
