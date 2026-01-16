@@ -3,70 +3,134 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
-    <title>Inventory Manager</title>
+    <link rel="stylesheet" href="CSS/styles.css" />
+    <title>Gestión de inventario</title>
   </head>
   <body>
-    <h1>INVENTORY MANAGER</h1>
     <div class="container">
-      <section>
-        <h2>Add product</h2>
+      <header>
+        <h1>Sistema de Gestión de Inventario</h1>
+        <p class="subtitle">Control total de stock y ventas</p>
+      </header>
+      <!-- SECTION TABS -->
+      <nav class="nav">
+        <button class="nav-item active" data-nav="dashboard">Dashboard</button>
+        <button class="nav-item" data-nav="products">Productos</button>
+        <button class="nav-item" data-nav="orders">Órdenes</button>
+      </nav>
+      <!-- SECTION DASHBOARD -->
+      <section class="nav-item-content active">
+        <h2>Panel de control</h2>
+        <div id="low-stock-alerts"></div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Productos</div>
+            <div class="stat-value" id="stat-total-products">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Valor Inventario</div>
+            <div class="stat-value" id="stat-inventory-value">$0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Órdenes Hoy</div>
+            <div class="stat-value" id="stat-orders-today">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Stock Bajo</div>
+            <div class="stat-value" id="stat-low-stock">0</div>
+          </div>
+        </div>
+      </section>
+      <!--  -->
+      <!-- SECTION PRODUCTS -->
+      <section id="products" class="nav-item-content">
+        <h2>Gestión de Productos</h2>
+
         <form id="product-form">
-          <input
-            type="text"
-            id="name"
-            placeholder="Product name"
-            autofocus
-            required
-          />
-          <input
-            type="number"
-            id="price"
-            placeholder="Price"
-            min="1"
-            required
-          />
-          <input
-            type="number"
-            id="quantity"
-            placeholder="Quantity"
-            min="1"
-            required
-          />
-          <select name="category" id="category">
-            <option value="">Category</option>
-            <option value="Clothing">Clothing</option>
-            <option value="Home">Home</option>
-            <option value="Other">Other</option>
-          </select>
-          <button type="submit" class="btn-add">Add</button>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre del producto*</label>
+              <input type="text" id="product-name" required />
+            </div>
+            <div class="form-group">
+              <label>Categoria*</label>
+              <select name="product-category" id="product-category" required>
+                <option value="">Seleccionar...</option>
+                <option value="Electrónica">Electrónica</option>
+                <option value="Ropa">Ropa</option>
+                <option value="Alimentos">Alimentos</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Hogar">Hogar</option>
+                <option value="Deportes">Deportes</option>
+                <option value="Juguetes">Juguetes</option>
+                <option value="Otros">Otros</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Precio ($)*</label>
+              <input type="number" id="product-price" min="1" required />
+            </div>
+            <div class="form-group">
+              <label>Cantidad*</label>
+              <input type="number" id="product-quantity" min="0" required />
+            </div>
+            <div class="form-group">
+              <label>Stock Minimo</label>
+              <input type="number" id="product-min-stock" min="0" value="5" />
+            </div>
+            <div class="form-group">
+              <label>Código</label>
+              <input type="text" id="product-id" placeholder="Opcional" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Descripción</label>
+            <textarea
+              id="product-description"
+              rows="3"
+              placeholder="Descripción del producto (opcional)"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <span id="product-submit-text">Agregar Producto</span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="cancel-edit">
+            Cancelar
+          </button>
         </form>
       </section>
-
-      <section>
-        <h2>Products</h2>
-        <ul id="product-list"></ul>
-      </section>
-
-      <section>
-        <h2>Create order</h2>
+      <!--  -->
+      <!-- SECTION ORDERS -->
+      <section id="orders" class="nav-item-content">
+        <h2>Nueva orden de venta</h2>
         <form id="order-form">
-          <select id="order-product"></select>
-          <input
-            type="number"
-            id="order-quantity"
-            placeholder="Order quantity"
-            required
-          />
-          <button type="submit" class="btn-add">Save order</button>
-        </form>
-      </section>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Producto*</label>
+              <select id="order-product" required>
+                <option value="">Seleccionar producto...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Cantidad*</label>
+              <input type="number" id="order-quantity" min="1" required />
+            </div>
+            <div class="form-group">
+              <label>Cliente*</label>
+              <input type="text" id="order-customer" />
+            </div>
+          </div>
+          <div id="order-summary">
+            <strong>Resumen:</strong>
+            <div id="order-details"></div>
+          </div>
 
-      <section>
-        <h2>Orders</h2>
-        <ul id="order-list"></ul>
+          <button type="submit" class="btn btn-success">Procesar orden</button>
+        </form>
       </section>
     </div>
+    <!-- DIV CONTAINER -->
   </body>
-  <script src="main.js"></script>
+  <script src="JS/main.js"></script>
 </html>
