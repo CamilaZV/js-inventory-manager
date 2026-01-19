@@ -3,134 +3,274 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="CSS/styles.css" />
-    <title>Gestión de inventario</title>
+    <script
+      src="https://kit.fontawesome.com/395bfb60ad.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/ASSETS/CSS/styles.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/ASSETS/MEDIA/boxes-stacked-solid.svg"
+    />
+    <title>Inventory management</title>
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>Sistema de Gestión de Inventario</h1>
-        <p class="subtitle">Control total de stock y ventas</p>
+        <h1>Inventory Management System</h1>
+        <p class="subtitle">Total control of stock and sales</p>
       </header>
       <!-- SECTION TABS -->
       <nav class="nav">
-        <button class="nav-item active" data-nav="dashboard">Dashboard</button>
-        <button class="nav-item" data-nav="products">Productos</button>
-        <button class="nav-item" data-nav="orders">Órdenes</button>
+        <button class="nav-item active" data-nav-item="dashboard">
+          <i class="fa-solid fa-chart-line"></i>
+          Dashboard
+        </button>
+        <button class="nav-item" data-nav-item="products">
+          <i class="fa-solid fa-boxes-packing"></i>Products
+        </button>
+        <button class="nav-item" data-nav-item="orders">
+          <i class="fa-regular fa-clipboard"></i>Orders
+        </button>
       </nav>
       <!-- SECTION DASHBOARD -->
-      <section class="nav-item-content active">
-        <h2>Panel de control</h2>
-        <div id="low-stock-alerts"></div>
+      <section id="dashboard" class="nav-item-content active">
+        <h2>Control panel</h2>
 
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-label">Total Productos</div>
+            <div class="stat-label">Total Products</div>
             <div class="stat-value" id="stat-total-products">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Valor Inventario</div>
+            <div class="stat-label">Inventory Value</div>
             <div class="stat-value" id="stat-inventory-value">$0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Órdenes Hoy</div>
+            <div class="stat-label">Orders Today</div>
             <div class="stat-value" id="stat-orders-today">0</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">Stock Bajo</div>
-            <div class="stat-value" id="stat-low-stock">0</div>
-          </div>
+        </div>
+
+        <h3>Bestselling products</h3>
+        <div class="table-container">
+          <table id="top-products-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Units sold</th>
+                <th>Revenue</th>
+              </tr>
+            </thead>
+            <tbody id="top-products-body"></tbody>
+          </table>
         </div>
       </section>
       <!--  -->
       <!-- SECTION PRODUCTS -->
       <section id="products" class="nav-item-content">
-        <h2>Gestión de Productos</h2>
+        <h2>New product</h2>
 
         <form id="product-form">
           <div class="form-grid">
             <div class="form-group">
-              <label>Nombre del producto*</label>
+              <label>Product name*</label>
               <input type="text" id="product-name" required />
             </div>
             <div class="form-group">
-              <label>Categoria*</label>
+              <label>Category*</label>
               <select name="product-category" id="product-category" required>
-                <option value="">Seleccionar...</option>
-                <option value="Electrónica">Electrónica</option>
-                <option value="Ropa">Ropa</option>
-                <option value="Alimentos">Alimentos</option>
-                <option value="Bebidas">Bebidas</option>
-                <option value="Hogar">Hogar</option>
-                <option value="Deportes">Deportes</option>
-                <option value="Juguetes">Juguetes</option>
-                <option value="Otros">Otros</option>
+                <option value="">Select...</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Food">Food</option>
+                <option value="Drinks">Drinks</option>
+                <option value="Home">Home</option>
+                <option value="Sport">Sport</option>
+                <option value="Toys">Toys</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Precio ($)*</label>
+              <label>Price ($)*</label>
               <input type="number" id="product-price" min="1" required />
             </div>
             <div class="form-group">
-              <label>Cantidad*</label>
+              <label>Quantity*</label>
               <input type="number" id="product-quantity" min="0" required />
-            </div>
-            <div class="form-group">
-              <label>Stock Minimo</label>
-              <input type="number" id="product-min-stock" min="0" value="5" />
-            </div>
-            <div class="form-group">
-              <label>Código</label>
-              <input type="text" id="product-id" placeholder="Opcional" />
             </div>
           </div>
           <div class="form-group">
-            <label>Descripción</label>
+            <label>Description</label>
             <textarea
               id="product-description"
               rows="3"
-              placeholder="Descripción del producto (opcional)"
+              placeholder="Product description (optional)"
             ></textarea>
           </div>
           <button type="submit" class="btn btn-primary">
-            <span id="product-submit-text">Agregar Producto</span>
-          </button>
-          <button type="button" class="btn btn-secondary" id="cancel-edit">
-            Cancelar
+            <span id="product-submit-text">Add Product</span>
           </button>
         </form>
+        <hr />
+
+        <div class="search-filter">
+          <input
+            type="text"
+            id="search-products"
+            placeholder="Search product..."
+          />
+          <select id="filter-category">
+            <option value="">All categories</option>
+          </select>
+          <button class="btn btn-secondary" id="export-products">
+            Export data
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body"></tbody>
+          </table>
+        </div>
       </section>
       <!--  -->
       <!-- SECTION ORDERS -->
       <section id="orders" class="nav-item-content">
-        <h2>Nueva orden de venta</h2>
+        <h2>New order</h2>
         <form id="order-form">
           <div class="form-grid">
             <div class="form-group">
-              <label>Producto*</label>
+              <label>Product*</label>
               <select id="order-product" required>
-                <option value="">Seleccionar producto...</option>
+                <option value="">Select product...</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Cantidad*</label>
+              <label>Quantity*</label>
               <input type="number" id="order-quantity" min="1" required />
             </div>
             <div class="form-group">
-              <label>Cliente*</label>
+              <label>Customer</label>
               <input type="text" id="order-customer" />
             </div>
           </div>
-          <div id="order-summary">
-            <strong>Resumen:</strong>
+          <div id="order-summary" class="order-summary">
             <div id="order-details"></div>
           </div>
 
-          <button type="submit" class="btn btn-success">Procesar orden</button>
+          <button type="submit" class="btn btn-success">Save order</button>
         </form>
+        <hr />
+        <h3>Recent Orders</h3>
+        <div class="search-filter">
+          <input
+            type="text"
+            id="search-orders"
+            placeholder="Search orders..."
+          />
+          <select id="filter-status">
+            <option value="">All status</option>
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+          </select>
+          <select id="filter-date">
+            <option value="all">All dates</option>
+            <option value="today">Today</option>
+            <option value="week">Last week</option>
+            <option value="month">Last month</option>
+          </select>
+          <button class="btn btn-secondary" id="export-orders">
+            Export data
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Product</th>
+                <th>Customer</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body"></tbody>
+          </table>
+        </div>
       </section>
     </div>
+
+    <!-- EDIT MODAL -->
+    <div id="edit-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Edit Product</h2>
+          <button class="modal-close" onclick="closeEditModal()">
+            &times;
+          </button>
+        </div>
+        <form id="edit-form">
+          <input type="hidden" id="edit-id" />
+          <div class="form-group">
+            <label>Name *</label>
+            <input type="text" id="edit-name" required />
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select id="edit-category" required>
+              <option value="Electronics">Electronics</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Food">Food</option>
+              <option value="Drinks">Drinks</option>
+              <option value="Home">Home</option>
+              <option value="Sport">Sport</option>
+              <option value="Toys">Toys</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Price ($) *</label>
+            <input type="number" id="edit-price" min="0" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label>Quantity *</label>
+            <input type="number" id="edit-quantity" min="0" required />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="edit-description" rows="3"></textarea>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeEditModal()"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- DIV CONTAINER -->
   </body>
-  <script src="JS/main.js"></script>
+  <script src="/ASSETS/JS/main.js" type="module"></script>
 </html>
