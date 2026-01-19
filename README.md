@@ -14,14 +14,35 @@ products can be added with available stock, orders can be created, and stock is 
 
 ## 🛠️ Technologies
 
-- HTML5
-- CSS3
-- JavaScript (Vanilla)
+- Pure JavaScript (no frameworks)
+- HTML5 + CSS3
+- LocalStorage for data persistence
+- Responsive design
 
 ## 📱 Features
 
-- Add products with category, price and stock
-- Create orders based on available inventory
-- Automatic stock update after each order
-- Prevent invalid orders
-- Persistent data using localStorage
+### Product Management
+
+- Add, edit, and delete products
+- Categorize items (Electronics, Food, Clothing, etc.)
+- Track codes and descriptions
+- Real-time stock updates
+
+### Sales & Orders
+
+- Process sales orders quickly
+- Automatic stock deduction
+- Customer tracking
+
+### User Experience
+
+- Modern, responsive design
+- Mobile-friendly interface
+- Intuitive navigation with tabs
+- No installation required
+
+### Data Management
+
+- Export reports to TXT format
+- Advanced search and filters
+- Works offline (localStorage)
