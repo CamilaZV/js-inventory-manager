@@ -1,17 +1,23 @@
 import { generateProductID, formatDate } from './utils.js';
 import { state, saveData, renderAll } from './main.js';
 import { exportTXT } from './data.js';
+import { addToHistory } from './history.js';
 
 export function initFormOrder() {
   const orderQuantityInput = document.getElementById('order-quantity');
+  const orderProduct = document.getElementById('order-product');
+  const msgConfirm = document.getElementById('order-confirm');
+
+  document.getElementById('order-summary').style.display = 'none';
 
   orderQuantityInput.addEventListener('input', updateOrderSummary);
+  orderProduct.addEventListener('change', updateOrderSummary);
 
   document.getElementById('order-form').addEventListener('submit', (e) => {
     e.preventDefault();
 
     const quantity = Number(orderQuantityInput.value);
-    const productId = document.getElementById('order-product').value;
+    const productId = orderProduct.value;
     const customer = document.getElementById('order-customer').value.trim();
 
     const product = state.products.find((p) => p.id === productId);
@@ -39,40 +45,52 @@ export function initFormOrder() {
     };
 
     product.quantity -= quantity;
+
     state.orders.unshift(order);
+    addToHistory(
+      'sale',
+      product.name,
+      `Sold ${quantity} units to ${customer || 'General customer'}`,
+    );
 
     saveData();
 
     e.target.reset();
     document.getElementById('order-summary').style.display = 'none';
-    renderAll();
 
-    alert(`Order processed successfully\nTotal: ${order.total}`);
+    msgConfirm.textContent = 'Order successfully added.';
+
+    setTimeout(function () {
+      msgConfirm.textContent = '';
+    }, 2000);
+
+    renderAll();
   });
 }
 
 export function updateOrderSummary() {
   const productId = document.getElementById('order-product').value;
-  const quantity = Number(document.getElementById('order-quantity').value) || 0;
+  const quantity = Number(document.getElementById('order-quantity').value);
   const summaryDiv = document.getElementById('order-summary');
   const detailsDiv = document.getElementById('order-details');
 
   if (!productId || quantity <= 0) {
-    summaryDiv.style.display = 'none';
+    detailsDiv.innerHTML = `Product or quantity is not valid.`;
     return;
   }
 
   const product = state.products.find((p) => p.id === productId);
-  if (!product) return;
+
+  if (!product) {
+    summaryDiv.style.display = 'none';
+    return;
+  }
 
   const total = product.price * quantity;
 
   detailsDiv.innerHTML = `
-        <h4>SUMMARY:</h4>
-        <p><strong>Product:</strong> ${product.name}</p>
-        <p><strong>Unit price:</strong> $${product.price}</p>
-        <p><strong>Quantity:</strong> ${quantity}</p>
-        <p><strong>Total:</strong> $${total}</p>
+        <h4>Summary:</h4>
+        <p>${product.name} (${quantity} x $${product.price}) - <strong>TOTAL: $${total}</strong></p>
         ${
           quantity > product.quantity
             ? '<p style="color: #dc3545;"><strong>Insufficient stock!</strong></p>'
@@ -130,7 +148,7 @@ export function renderOrdersTable() {
 
   if (filtered.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="7" style="text-align: center; padding: 40px;">No orders found</td></tr>';
+      '<tr><td colspan="7" class="empty-table">No orders found</td></tr>';
     return;
   }
 
@@ -148,9 +166,9 @@ export function renderOrdersTable() {
     <div class="action-buttons">
       ${
         o.status === 'completed'
-          ? '<span class="badge badge-success">✓ Completed</span>'
+          ? '<span class="badge badge-success"><i class="fa-solid fa-check"></i>Order completed</span>'
           : `
-          <button class="btn btn-success btn-small" onclick="completeOrder('${o.id}')" title="Complete Order">
+          <button class="btn btn-check btn-small " onclick="completeOrder('${o.id}')" title="Complete Order">
             <i class="fa-solid fa-check"></i>
           </button>
           <button class="btn btn-danger btn-small" onclick="deleteOrder('${o.id}')" title="Cancel & Return Stock">
@@ -161,7 +179,7 @@ export function renderOrdersTable() {
     </div>
   </td>
     </tr>
-  `
+  `,
     )
     .join('');
 }
@@ -212,7 +230,7 @@ window.deleteOrder = function (id) {
   if (orderIndex !== -1) {
     if (
       confirm(
-        `¿Are you sure you want to cancel this order? - ${order.quantity} units will be returned to stock.`
+        `¿Are you sure you want to cancel this order? - ${order.quantity} units will be returned to stock.`,
       )
     ) {
       const product = state.products.find((p) => p.id === order.productId);
@@ -221,12 +239,16 @@ window.deleteOrder = function (id) {
       }
 
       state.orders.splice(orderIndex, 1);
-
+      addToHistory(
+        'delete',
+        order.productName,
+        `Order cancelled(${order.quantity} units returned to stock)`,
+      );
+      alert('Order cancelled and stock restored.');
       saveData();
       renderAll();
     }
   }
-  alert('Order cancelled and stock restored.');
 };
 
 window.completeOrder = function (id) {

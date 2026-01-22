@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
@@ -32,6 +32,9 @@
         </button>
         <button class="nav-item" data-nav-item="orders">
           <i class="fa-regular fa-clipboard"></i>Orders
+        </button>
+        <button class="nav-item" data-nav-item="history">
+          <i class="fa-solid fa-folder-open"></i>History
         </button>
       </nav>
       <!-- SECTION DASHBOARD -->
@@ -95,11 +98,11 @@
             </div>
             <div class="form-group">
               <label>Price ($)*</label>
-              <input type="number" id="product-price" min="1" required />
+              <input type="number" id="product-price" min="0" required />
             </div>
             <div class="form-group">
               <label>Quantity*</label>
-              <input type="number" id="product-quantity" min="0" required />
+              <input type="number" id="product-quantity" min="1" required />
             </div>
           </div>
           <div class="form-group">
@@ -110,9 +113,12 @@
               placeholder="Product description (optional)"
             ></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">
-            <span id="product-submit-text">Add Product</span>
-          </button>
+          <div class="confirm">
+            <button type="submit" class="btn btn-primary">
+              <span id="product-submit-text">Add Product</span>
+            </button>
+            <p id="product-confirm" class="text-confirm"></p>
+          </div>
         </form>
         <hr />
 
@@ -125,7 +131,7 @@
           <select id="filter-category">
             <option value="">All categories</option>
           </select>
-          <button class="btn btn-secondary" id="export-products">
+          <button class="btn btn-secondary btn-export" id="export-products">
             Export data
           </button>
         </div>
@@ -167,10 +173,11 @@
               <input type="text" id="order-customer" />
             </div>
           </div>
+
           <div id="order-summary" class="order-summary">
             <div id="order-details"></div>
           </div>
-
+          <p id="order-confirm" class="text-confirm"></p>
           <button type="submit" class="btn btn-success">Save order</button>
         </form>
         <hr />
@@ -192,7 +199,7 @@
             <option value="week">Last week</option>
             <option value="month">Last month</option>
           </select>
-          <button class="btn btn-secondary" id="export-orders">
+          <button class="btn btn-secondary btn-export" id="export-orders">
             Export data
           </button>
         </div>
@@ -214,13 +221,53 @@
           </table>
         </div>
       </section>
-    </div>
+      <!--  -->
+      <!-- SECTION HISTORY -->
+      <section id="history" class="nav-item-content">
+        <h2>Transaction history</h2>
 
+        <div class="search-filter">
+          <input
+            type="text"
+            id="search-history"
+            placeholder="Search history..."
+          />
+          <select id="filter-movement-type">
+            <option value="all">All movements</option>
+            <option value="sale">Sale</option>
+            <option value="add">Add</option>
+            <option value="edit">Edit</option>
+            <option value="delete">Delete</option>
+          </select>
+          <button class="btn btn-secondary btn-export" id="export-history">
+            Export data
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Product</th>
+                <th>Details</th>
+                <th>User</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+      <!-- DIV CONTAINER -->
+    </div>
+    <!--  -->
     <!-- EDIT MODAL -->
     <div id="edit-modal" class="modal">
       <div class="modal-content">
         <div class="modal-header">
           <h2>Edit Product</h2>
+
           <button class="modal-close" onclick="closeEditModal()">
             &times;
           </button>
@@ -256,6 +303,8 @@
             <label>Description</label>
             <textarea id="edit-description" rows="3"></textarea>
           </div>
+          <p id="edit-confirm" class="text-confirm"></p>
+
           <div>
             <button type="submit" class="btn btn-primary">Save changes</button>
             <button
@@ -269,8 +318,6 @@
         </form>
       </div>
     </div>
-
-    <!-- DIV CONTAINER -->
   </body>
   <script src="/ASSETS/JS/main.js" type="module"></script>
 </html>

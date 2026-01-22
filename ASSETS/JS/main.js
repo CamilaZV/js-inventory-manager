@@ -12,9 +12,12 @@ import {
   initOrderEvents,
 } from './orders.js';
 
+import { renderHistoryTable, initHistoryEvents } from './history.js';
+
 export const state = {
   products: [],
   orders: [],
+  history: [],
 };
 
 loadData();
@@ -23,17 +26,20 @@ initFormProduct();
 initProductEvents();
 initFormOrder();
 initOrderEvents();
+initHistoryEvents();
 
 renderAll();
 
 function loadData() {
   state.products = JSON.parse(localStorage.getItem('products') || '[]');
   state.orders = JSON.parse(localStorage.getItem('orders') || '[]');
+  state.history = JSON.parse(localStorage.getItem('history') || '[]');
 }
 
 export function saveData() {
   localStorage.setItem('products', JSON.stringify(state.products));
   localStorage.setItem('orders', JSON.stringify(state.orders));
+  localStorage.setItem('history', JSON.stringify(state.history));
 }
 
 function initTabs() {
@@ -52,6 +58,7 @@ function initTabs() {
       document.getElementById(navItemName).classList.add('active');
 
       if (navItemName === 'dashboard') renderDashboard();
+      if (navItemName === 'reports') renderReports();
     });
   });
 }
@@ -61,6 +68,7 @@ export function renderAll() {
   renderProductsTable();
   renderOrdersTable();
   renderProductSelect();
+  renderHistoryTable();
   renderDashboard();
 }
 
@@ -68,17 +76,16 @@ function renderDashboard() {
   const totalProducts = state.products.length;
   const inventoryValue = state.products.reduce(
     (sum, p) => sum + p.price * p.quantity,
-    0
+    0,
   );
   const today = new Date().setHours(0, 0, 0, 0);
   const ordersToday = state.orders.filter(
-    (o) => new Date(o.date).setHours(0, 0, 0, 0) === today
+    (o) => new Date(o.date).setHours(0, 0, 0, 0) === today,
   ).length;
 
   document.getElementById('stat-total-products').textContent = totalProducts;
-  document.getElementById(
-    'stat-inventory-value'
-  ).textContent = `$ ${inventoryValue}`;
+  document.getElementById('stat-inventory-value').textContent =
+    `$ ${inventoryValue}`;
   document.getElementById('stat-orders-today').textContent = ordersToday;
 
   const productSales = {};
@@ -105,7 +112,7 @@ function renderDashboard() {
 
   if (topProducts.length === 0) {
     topProductsBody.innerHTML =
-      '<tr><td colspan="4" style="text-align: center; padding: 40px;">No sales recorded</td></tr>';
+      '<tr><td colspan="4" class="empty-table"">No sales recorded</td></tr>';
   } else {
     topProductsBody.innerHTML = topProducts
       .map(
@@ -114,7 +121,7 @@ function renderDashboard() {
             <td>${p.category}</td>
             <td>${p.units}</td>
             <td>$ ${p.revenue}</td>
-          </tr>`
+          </tr>`,
       )
       .join('');
   }
