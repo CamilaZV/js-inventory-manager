@@ -90,7 +90,7 @@ export function updateOrderSummary() {
 
   detailsDiv.innerHTML = `
         <h4>Summary:</h4>
-        <p>${product.name} (${quantity} x $${product.price}) - <strong>TOTAL: $${total}</strong></p>
+        <p>${product.name} (${quantity} x $${product.price.toFixed(2)}) - <strong>TOTAL: $${total.toFixed(2)}</strong></p>
         ${
           quantity > product.quantity
             ? '<p style="color: #dc3545;"><strong>Insufficient stock!</strong></p>'
@@ -161,7 +161,7 @@ export function renderOrdersTable() {
       <td>${o.productName}</td>
       <td>${o.customer}</td>
       <td>${o.quantity}</td>
-      <td><strong>$ ${o.total}</strong></td>
+      <td><strong>$ ${o.total.toFixed(2)}</strong></td>
       <td>
     <div class="action-buttons">
       ${

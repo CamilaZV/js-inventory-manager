@@ -85,7 +85,7 @@ function renderDashboard() {
 
   document.getElementById('stat-total-products').textContent = totalProducts;
   document.getElementById('stat-inventory-value').textContent =
-    `$ ${inventoryValue}`;
+    `$ ${inventoryValue.toFixed(2)}`;
   document.getElementById('stat-orders-today').textContent = ordersToday;
 
   const productSales = {};
@@ -120,7 +120,7 @@ function renderDashboard() {
             <td>${p.name}</td>
             <td>${p.category}</td>
             <td>${p.units}</td>
-            <td>$ ${p.revenue}</td>
+            <td>$ ${p.revenue.toFixed(2)}</td>
           </tr>`,
       )
       .join('');

@@ -58,7 +58,7 @@ export function renderProductsTable() {
         }
       </td>
       <td>${p.category}</td>
-      <td>$ ${p.price}</td>
+      <td>$ ${p.price.toFixed(2)}</td>
       <td>${p.quantity}</td>
       <td>
         <div class="action-buttons">

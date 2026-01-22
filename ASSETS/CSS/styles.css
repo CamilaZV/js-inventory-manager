@@ -416,12 +416,10 @@ h2 {
   h1 {
     font-size: 2rem;
   }
-  table {
-    font-size: 14px;
-  }
 
   th,
   td {
     padding: 10px;
+    font-size: 0.8rem;
   }
 }
