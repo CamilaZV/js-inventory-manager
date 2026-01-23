@@ -46,3 +46,8 @@ products can be added with available stock, orders can be created, and stock is 
 - Export reports to TXT format
 - Advanced search and filters
 - Works offline (localStorage)
+
+### System Maintenance & Safety
+- Danger Zone: Secure area for critical system actions.
+- Data Cleanup: Deletes orders and transaction history without removing products.
+- Factory Reset: "Delete All" function to erase all data.
