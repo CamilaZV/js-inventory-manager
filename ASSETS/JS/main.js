@@ -14,6 +14,8 @@ import {
 
 import { renderHistoryTable, initHistoryEvents } from './history.js';
 
+import { initSettingsEvents } from './settings.js';
+
 export const state = {
   products: [],
   orders: [],
@@ -27,6 +29,7 @@ initProductEvents();
 initFormOrder();
 initOrderEvents();
 initHistoryEvents();
+initSettingsEvents();
 
 renderAll();
 
@@ -58,7 +61,6 @@ function initTabs() {
       document.getElementById(navItemName).classList.add('active');
 
       if (navItemName === 'dashboard') renderDashboard();
-      if (navItemName === 'reports') renderReports();
     });
   });
 }
@@ -117,7 +119,7 @@ function renderDashboard() {
     topProductsBody.innerHTML = topProducts
       .map(
         (p) => `<tr>
-            <td>${p.name}</td>
+            <td><strong>${p.name}</strong></td>
             <td>${p.category}</td>
             <td>${p.units}</td>
             <td>$ ${p.revenue.toFixed(2)}</td>

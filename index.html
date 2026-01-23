@@ -36,10 +36,13 @@
         <button class="nav-item" data-nav-item="history">
           <i class="fa-solid fa-folder-open"></i>History
         </button>
+        <button class="nav-item" data-nav-item="settings">
+          <i class="fa-solid fa-gears"></i>Settings
+        </button>
       </nav>
       <!-- SECTION DASHBOARD -->
       <section id="dashboard" class="nav-item-content active">
-        <h2>Control panel</h2>
+        <h2>Control Panel</h2>
 
         <div class="stats-grid">
           <div class="stat-card">
@@ -56,7 +59,7 @@
           </div>
         </div>
 
-        <h3>Bestselling products</h3>
+        <h2>Best-selling Products</h2>
         <div class="table-container">
           <table id="top-products-table">
             <thead>
@@ -74,7 +77,7 @@
       <!--  -->
       <!-- SECTION PRODUCTS -->
       <section id="products" class="nav-item-content">
-        <h2>New product</h2>
+        <h2>New Product</h2>
 
         <form id="product-form">
           <div class="form-grid">
@@ -155,7 +158,7 @@
       <!--  -->
       <!-- SECTION ORDERS -->
       <section id="orders" class="nav-item-content">
-        <h2>New order</h2>
+        <h2>New Order</h2>
         <form id="order-form">
           <div class="form-grid">
             <div class="form-group">
@@ -174,9 +177,7 @@
             </div>
           </div>
 
-          <div id="order-summary" class="order-summary">
-            <div id="order-details"></div>
-          </div>
+          <div id="order-summary" class="order-summary"></div>
           <p id="order-confirm" class="text-confirm"></p>
           <button type="submit" class="btn btn-success">Save order</button>
         </form>
@@ -220,7 +221,7 @@
       <!--  -->
       <!-- SECTION HISTORY -->
       <section id="history" class="nav-item-content">
-        <h2>Transaction history</h2>
+        <h2>Transaction History</h2>
 
         <div class="search-filter">
           <input
@@ -253,6 +254,41 @@
             </thead>
             <tbody id="history-table-body"></tbody>
           </table>
+        </div>
+      </section>
+      <!-- SECTION SETTINGS -->
+      <section id="settings" class="nav-item-content">
+        <h2>System Settings</h2>
+        <p class="subtitle">Manage system data and database cleanup.</p>
+
+        <div class="danger-zone">
+          <h3><i class="fa-solid fa-radiation"></i> Danger Zone</h3>
+          <p>
+            Actions performed here are permanent. Please proceed with caution.
+          </p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>History</label>
+              <button class="btn btn-danger-outline" id="clear-history">
+                <i class="fa-solid fa-eraser"></i> Clear Transaction History
+              </button>
+            </div>
+
+            <div class="form-group">
+              <label>Orders</label>
+              <button class="btn btn-danger-outline" id="delete-orders">
+                <i class="fa-solid fa-trash-can"></i> Delete Orders
+              </button>
+            </div>
+
+            <div class="form-group">
+              <label>Critical Actions</label>
+              <button class="btn btn-danger-all" id="delete-all">
+                <i class="fa-solid fa-trash-can"></i> Delete All
+              </button>
+            </div>
+          </div>
         </div>
       </section>
       <!-- DIV CONTAINER -->

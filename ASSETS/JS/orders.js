@@ -72,24 +72,25 @@ export function updateOrderSummary() {
   const productId = document.getElementById('order-product').value;
   const quantity = Number(document.getElementById('order-quantity').value);
   const summaryDiv = document.getElementById('order-summary');
-  const detailsDiv = document.getElementById('order-details');
+
+  summaryDiv.style.display = 'block';
 
   if (!productId || quantity <= 0) {
-    detailsDiv.innerHTML = `Product or quantity is not valid.`;
+    summaryDiv.innerHTML = `<p style="color: #dc3545;">Please select a product and a valid quantity.</p>`;
     return;
   }
 
   const product = state.products.find((p) => p.id === productId);
 
   if (!product) {
-    summaryDiv.style.display = 'none';
+    summaryDiv.innerHTML = `<p style="color: #dc3545;">Product not found.</p>`;
     return;
   }
 
   const total = product.price * quantity;
 
-  detailsDiv.innerHTML = `
-        <h4>Summary:</h4>
+  summaryDiv.innerHTML = `
+        <h4>Order Preview:</h4>
         <p>${product.name} (${quantity} x $${product.price.toFixed(2)}) - <strong>TOTAL: $${total.toFixed(2)}</strong></p>
         ${
           quantity > product.quantity
@@ -97,8 +98,6 @@ export function updateOrderSummary() {
             : ''
         }
       `;
-
-  summaryDiv.style.display = 'block';
 }
 
 export function getFilteredOrders() {
@@ -212,6 +211,14 @@ export function initOrderEvents() {
   document
     .getElementById('filter-status')
     .addEventListener('change', renderOrdersTable);
+
+  document
+    .getElementById('order-product')
+    .addEventListener('change', updateOrderSummary);
+
+  document
+    .getElementById('order-quantity')
+    .addEventListener('input', updateOrderSummary);
 
   document.getElementById('export-orders').addEventListener('click', () => {
     const filtered = getFilteredOrders();
