@@ -5,6 +5,9 @@ JavaScript application to manage products and orders built with vanilla JavaScri
 This project simulates a basic inventory workflow:
 products can be added with available stock, orders can be created, and stock is automatically updated.
 
+## Live Demo
+https://js-inventory-manager-cz.vercel.app/
+
 ## 🎯 Goals
 
 - Practice JavaScript logic and state management
